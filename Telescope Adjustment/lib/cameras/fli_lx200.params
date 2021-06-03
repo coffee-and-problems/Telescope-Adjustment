@@ -1,0 +1,25 @@
+# Parameters of FLI camera
+# Camera parameters
+resolution_x 528       # Resolution along x-direction
+resolution_y 513       # Resolution anong y-direction
+
+# Filter wheel(s)
+phot_filters  b,v,r,i # List of color filters in a filter wheel
+polar_filters  x,y     # List of poarization filters in a filter wheel. First and second polarization modes.
+two_wheels     True    # True if polarisation and color filters are in two separate wheels
+
+# Polarisation paramerers
+polar_pair_shift_first    +12,-5  # Coordinate shift from left-ish to right-ish component in first polarisation mode
+polar_pair_shift_second   +5,-11  # Coordinate shift from left-ish to right-ish component in second polarisation mode
+
+# Dark frames parameters
+darks_required     5   # Number of darks per master dark
+biases_required    5   # Number of biases per master bias
+
+# Flat fields
+flip_flat_ud      False   # Flip flat field upside-down
+flip_flat_lr      True    # Flip flat field left-right
+
+# Images
+flip_data_ud      False   # Flip data images upside-down
+flip_data_lr      False   # Flip data images left_right

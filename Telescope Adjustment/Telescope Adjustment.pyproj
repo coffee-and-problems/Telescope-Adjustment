@@ -25,22 +25,59 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Aacso_geting_photometry.py" />
-    <Compile Include="alipylocal\align.py" />
-    <Compile Include="alipylocal\ident.py" />
-    <Compile Include="alipylocal\imgcat.py" />
-    <Compile Include="alipylocal\pysex.py" />
-    <Compile Include="alipylocal\quad.py" />
-    <Compile Include="alipylocal\star.py" />
-    <Compile Include="alipylocal\__init__.py" />
+    <Compile Include="lib\alignment.py" />
+    <Compile Include="lib\alipylocal\align.py" />
+    <Compile Include="lib\alipylocal\ident.py" />
+    <Compile Include="lib\alipylocal\imgcat.py" />
+    <Compile Include="lib\alipylocal\pysex.py" />
+    <Compile Include="lib\alipylocal\quad.py" />
+    <Compile Include="lib\alipylocal\star.py" />
+    <Compile Include="lib\alipylocal\__init__.py" />
+    <Compile Include="lib\asciidatalocal\asciicolumn.py" />
+    <Compile Include="lib\asciidatalocal\asciidata.py" />
+    <Compile Include="lib\asciidatalocal\asciielement.py" />
+    <Compile Include="lib\asciidatalocal\asciierror.py" />
+    <Compile Include="lib\asciidatalocal\asciifunction.py" />
+    <Compile Include="lib\asciidatalocal\asciiheader.py" />
+    <Compile Include="lib\asciidatalocal\asciisorter.py" />
+    <Compile Include="lib\asciidatalocal\asciiutils.py" />
+    <Compile Include="lib\asciidatalocal\__init__.py" />
+    <Compile Include="lib\cameras\camera.py" />
+    <Compile Include="lib\cameras\fli_lx200.py" />
+    <Compile Include="lib\cameras\st7_azt8.py" />
+    <Compile Include="lib\cameras\st7_lx200.py" />
+    <Compile Include="lib\Configuration.py" />
+    <Compile Include="lib\filterPolCat.py" />
+    <Compile Include="lib\ImagPanel.py" />
+    <Compile Include="lib\Menu.py" />
+    <Compile Include="lib\PolarChecker.py" />
+    <Compile Include="lib\reduction.py" />
+    <Compile Include="lib\RightPanel.py" />
+    <Compile Include="lib\se.py" />
+    <Compile Include="lib\__init__.py" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="alipylocal\" />
-    <Folder Include="alipylocal\.backups\" />
+    <Folder Include="lib\" />
+    <Folder Include="lib\alipylocal\" />
+    <Folder Include="lib\alipylocal\.backups\" />
+    <Folder Include="lib\asciidatalocal\" />
+    <Folder Include="lib\cameras\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="alipylocal\.backups\.ident.py~" />
-    <Content Include="alipylocal\.backups\.imgcat.py~" />
-    <Content Include="alipylocal\.backups\.pysex.py~" />
+    <Content Include="lib\alipylocal\.backups\.ident.py~" />
+    <Content Include="lib\alipylocal\.backups\.imgcat.py~" />
+    <Content Include="lib\alipylocal\.backups\.pysex.py~" />
+    <Content Include="lib\alipysex.conv" />
+    <Content Include="lib\alipysex.nnw" />
+    <Content Include="lib\alipysex.param" />
+    <Content Include="lib\alipysex.sex" />
+    <Content Include="lib\cameras\fli_lx200.params" />
+    <Content Include="lib\cameras\st7_azt8.params" />
+    <Content Include="lib\cameras\st7_lx200.params" />
+    <Content Include="lib\default.conv" />
+    <Content Include="lib\default.nnw" />
+    <Content Include="lib\default.param" />
+    <Content Include="lib\default.sex" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
