@@ -8,7 +8,7 @@ except ImportError:
         from astropy.io import fits as pyfits
 
 
-def affineremap(filepath, transform, shape, alifilepath=None, outdir="alipy_out", hdu=0, verbose=True):
+def affineremap(filepath, transform, shape, alifilepath=None, outdir="alipy_out", hdu=0, verbose=False):
     """
     Apply the simple affine transform to the image and saves the result as FITS, without using pyraf.
 
@@ -45,7 +45,7 @@ def affineremap(filepath, transform, shape, alifilepath=None, outdir="alipy_out"
     tofits(alifilepath, data, verbose=verbose)
 
 
-def shape(filepath, hdu=0, verbose=True):
+def shape(filepath, hdu=0, verbose=False):
     """
     Returns the 2D shape (width, height) of a FITS image.
 
@@ -60,7 +60,7 @@ def shape(filepath, hdu=0, verbose=True):
     return (int(hdr["NAXIS1"]), int(hdr["NAXIS2"]))
 
 
-def fromfits(infilename, hdu=0, verbose=True):
+def fromfits(infilename, hdu=0):
     """
     Reads a FITS file and returns a 2D numpy array of the data.
     Use hdu to specify which HDU you want (default = primary = 0)
@@ -70,7 +70,7 @@ def fromfits(infilename, hdu=0, verbose=True):
     return pixelarray, hdr
 
 
-def tofits(outfilename, pixelarray, verbose=True):
+def tofits(outfilename, pixelarray):
     """
     Takes a 2D numpy array and write it into a FITS file.
     If you specify a header (pyfits format, as returned by fromfits()) it will be used for the image.

@@ -35,7 +35,7 @@ class Identification:
         self.refmatchstars = []
         self.cand = None
 
-    def findtrans(self, r=5.0, verbose=True):
+    def findtrans(self, r=5.0, verbose=False):
         """
         Find the best trans given the quads, and tests if the match is sufficient
         """
