@@ -24,7 +24,7 @@ def GetStars(object_name, ra, dec):
         Save(object_name, table['AUID'], table['RA'], table['Dec'])
 
 def Save(object_name, auid, ra, dec):
-    file_path = path.join("Aavso photometry", "{0}.txt".format(object_name))
+    file_path = path.join("Aavso photometry", "{0}.csv".format(object_name))
     with open(file_path, "w") as f:
         for i in range(ra.count()):
             f.write("{0}, {1}, {2}\n".format(auid[i], ra[i].split(' ')[0], dec[i].split(' ')[0]))
