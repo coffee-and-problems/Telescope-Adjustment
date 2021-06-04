@@ -35,7 +35,7 @@ def GetPicture(ra, dec):
 
 def crop_image(picture):
     _pil = Image.open(io.BytesIO(picture))
-    return _pil.crop((17, 180, 1183, 1350))
+    return _pil.crop((19, 182, 1183, 1350))
 
 def Save(object_name, picture):
     file_path = path.join("Fields", "{0}.png".format(object_name))
