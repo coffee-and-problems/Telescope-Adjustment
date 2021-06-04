@@ -24,7 +24,7 @@ import os
 import shutil
 from os import path
 import subprocess
-import asciidatalocal as asciidata
+from lib import asciidatalocal as asciidata
 from numpy import genfromtxt, argsort
 
 
