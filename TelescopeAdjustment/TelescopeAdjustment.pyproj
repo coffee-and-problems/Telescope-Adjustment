@@ -3,13 +3,14 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>905272f2-10a4-4425-854f-2f6c9aa2d52e</ProjectGuid>
-    <ProjectHome>.</ProjectHome>
-    <StartupFile>Aavso_geting_pictures.py</StartupFile>
+    <ProjectHome>
+    </ProjectHome>
+    <StartupFile>main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>Telescope Adjustment</Name>
+    <Name>TelescopeAdjustment</Name>
     <RootNamespace>Telescope Adjustment</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -55,6 +56,9 @@
     <Compile Include="lib\RightPanel.py" />
     <Compile Include="lib\se.py" />
     <Compile Include="lib\__init__.py" />
+    <Compile Include="main.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="lib\" />

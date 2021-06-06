@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31129.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Telescope Adjustment", "Telescope Adjustment\Telescope Adjustment.pyproj", "{905272F2-10A4-4425-854F-2F6C9AA2D52E}"
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "TelescopeAdjustment", "TelescopeAdjustment\TelescopeAdjustment.pyproj", "{905272F2-10A4-4425-854F-2F6C9AA2D52E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
