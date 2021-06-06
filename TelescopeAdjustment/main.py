@@ -4,7 +4,7 @@ import glob
 from os import path
 
 from lib import alipylocal as alipy
-verbose = True
+verbose = False
 
 test_fits = r"C:\Users\maryc\source\repos\TelescopeAdjustment\TelescopeAdjustment\Fields\fits\OC457.fits"
 
@@ -17,28 +17,31 @@ def make_fits(png_path):
         name = path.basename(im_path)[:-4]
         im = imageio.imread(im_path)
         alipy.align.tofits("{0}\{1}.fits".format(path_to_reference_fits, name), im)
+
 def make_cat(path):
     cat = alipy.imgcat.ImgCat(path)
     cat.makecat(rerun=False, keepcat=True, verbose=verbose)
     cat.makestarlist(verbose=verbose)
     return cat
 
-def make_reference_cats(path_to_reference_fits):
+def make_reference_cats():
     ref_cats = []
     for im_path in glob.glob(path.join(path_to_reference_fits, "*.fits")):
         ref_cats.append(make_cat(im_path))
+    return ref_cats
 
-def find_reference(picture):
-    refs = []
+def find_transform(picture, object_name=None):
+    if object_name is None:
+        refs = make_reference_cats()
+    else:
+        cat = make_cat(path.join(path_to_reference_fits, "{0}.fits".format(object_name)))
+        refs = [cat]
     obj = make_cat(picture)
-    #for ref_cat in glob.glob(path.join(path_to_reference_catalogs, "*")):
-    for ref_cat in ref_cats:
+    for ref_cat in refs:
         idn = alipy.ident.Identification(ref_cat, obj)
-        print("aha")
         idn.findtrans(verbose=verbose)
-        refs.append(idn)
-    return refs
+        if idn.ok:
+            return idn.trans
 
 #make_fits(path_to_reference_fields)
-#make_reference_cats(path_to_reference_fits)
-refs = find_reference(test_fits)
+tarns = find_transform(test_fits)
