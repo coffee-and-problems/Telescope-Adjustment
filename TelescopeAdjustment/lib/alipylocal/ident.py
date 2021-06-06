@@ -98,7 +98,7 @@ class Identification:
             if verbose:
                 print("Refitting transform (before/after) :")
                 print(self.trans)
-                newtrans = star.fitstars(self.uknmatchstars, self.refmatchstars)
+            newtrans = star.fitstars(self.uknmatchstars, self.refmatchstars)
             if newtrans is not None:
                 self.trans = newtrans
                 if verbose:
