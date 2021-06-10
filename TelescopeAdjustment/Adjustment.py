@@ -26,6 +26,7 @@ class Adjustment(object):
             name = path.basename(im_path)[:-4]
             im = Image.open(im_path).convert('L')
             im_array = np.array(im)
+            im_array = np.rot90(im_array, 3)
             fits_path = path.join(self.path_to_reference_fits, "{0}.fits".format(name))
             alipy.align.tofits(fits_path, im_array)
 

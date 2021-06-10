@@ -22,7 +22,7 @@ class Aavso:
             :param dss: if True, DSS field will be requested instead of AAVSO one
             :type dss: bool
         """
-        PARAMS = {'ra':ra, 'dec':dec, 'maglimit':self.maglimit, 'fov':'11',
+        PARAMS = {'ra':ra, 'dec':dec, 'maglimit':self.maglimit, 'fov':'9.5',
                       'scale':'F', 'type':'chart', 'orientation':'ccd',
                       'special':'std_field', 'std_field':'on',
                       'north':'up', 'east':'right', 'resolution':'75'}
