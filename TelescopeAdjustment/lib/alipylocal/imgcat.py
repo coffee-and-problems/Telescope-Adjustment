@@ -96,3 +96,18 @@ class ImgCat:
         self.quadlist = quad.removeduplicates(self.quadlist, verbose=verbose)
         self.quadlevel += 1
         return True
+
+    def normalize_flux(self):
+        max_flux = -239239239
+        max_fwhm = -239239239
+
+        for star in self.starlist:
+            if star['flux'] > max_flux:
+                max_flux = star['flux']
+            if star['fwhm'] > max_fwhm:
+                max_fwhm = star['fwhm']
+        
+        for star in self.starlist:
+            star['fwhm'] /= max_fwhm
+        for star in self.starlist:
+            star['fwhm'] /= max_fwhm

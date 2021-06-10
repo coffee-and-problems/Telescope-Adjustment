@@ -2,6 +2,7 @@ import numpy as np
 import imageio
 import glob
 from os import path
+from PIL import Image
 
 from lib import alipylocal as alipy
 
@@ -23,9 +24,10 @@ class Adjustment(object):
         """
         for im_path in glob.glob(path.join(png_path, "*.png")):
             name = path.basename(im_path)[:-4]
-            im = imageio.imread(im_path)
+            im = Image.open(im_path).convert('L')
+            im_array = np.array(im)
             fits_path = path.join(self.path_to_reference_fits, "{0}.fits".format(name))
-            alipy.align.tofits(fits_path, im)
+            alipy.align.tofits(fits_path, im_array)
 
     def make_cat(self, path, keepcat=True):
         """
@@ -38,6 +40,10 @@ class Adjustment(object):
         cat.makecat(rerun=False, keepcat=self.keepcat, verbose=self.verbose)
         cat.makestarlist(verbose=self.verbose)
         return cat
+
+    def get_stars(self, path):
+        cat = self.make_cat(path)
+        return cat.starlist
 
     def make_reference_cats(self):
         """

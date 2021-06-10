@@ -47,6 +47,17 @@ class Star:
         if key == 'elon':
             return self.elon
 
+    def __setitem__(self, key, value):
+        """
+        Don't use it!
+        """
+        if key == 'flux':
+            self.flux = value
+        if key == 'fwhm':
+            self.fwhm = value
+        if key == 'elon':
+            self.elon = value
+
     def __str__(self):
         """
         A string representation of a source.
