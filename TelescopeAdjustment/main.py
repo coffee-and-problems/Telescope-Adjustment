@@ -5,55 +5,49 @@ from os import path
 
 from lib import alipylocal as alipy
 from Aavso import Aavso
+from Gaia import Gaia
 from Adjustment import Adjustment
 
-##Downloading reference pictures
-#source_file = "test_coords.csv"
-##source_file = "objects_coords.csv
-#aavso = Aavso()
-#aavso.GetFieldsForAll(source_file, dss=True)
+#obj = "q1959iS4"
+#ref = "q1959"
+obj = "3c371iS6"
+ref = "3c371"
 
-#Wrapping reference images in .fits
+#Geting Gaia catalogs
+gaia = Gaia()
+s1 = gaia.parse_gaia_results("{0}.gz".format(ref))
+#s2 = gaia.map(s1, 10, 528, gaia.coords_to_deg('19 59 59.8', '65 08 54'))
+s2 = gaia.map(s1, 10, 528, gaia.coords_to_deg('18 06 50.7', '69 49 28'))
+gaia.save_sex_cat(f"{ref}alipysexcat", s2)
+
+#AAAAAAAAAAAA
 adj = Adjustment(verbose=True, keepcat=True)
-#adj.clear("all")
-#adj.make_fits("Fields")
+
 
 #Finding transform for the field observed
-observed_field = r"C:\Users\maryc\source\repos\TelescopeAdjustment\TelescopeAdjustment\observations\q1959iS4.FIT"
-#observed_field = r"C:\Users\maryc\source\repos\TelescopeAdjustment\TelescopeAdjustment\Fields\fits\Q1959dss.fits"
-ref_field = r"C:\Users\maryc\source\repos\TelescopeAdjustment\TelescopeAdjustment\Fields\fits\Q1959.fits"
+observed_field = r"observations\{0}.FIT".format(obj)
 
-stars1 = adj.get_stars(observed_field)
-stars2 = adj.get_stars(ref_field)
+trans = adj.find_transform(observed_field, ref)
+trans = trans.inverse()
+stars = adj.get_stars(ref)
+stars3 = trans.applystarlist(stars)
+
+x_trans = []
+y_trans = []
+for star in stars3:
+    x_trans.append(star.x)
+    y_trans.append(star.y)
 
 import matplotlib.pyplot as plt
 from astropy.io import fits
-plt.figure(figsize=(5.00, 6.00), dpi=100)
+#plt.figure(figsize=(5.00, 6.00), dpi=100)
 
-#x1=[]
-#y1=[]
-#for star in stars1:
-#    x1.append(star.x)
-#    y1.append(star.y)
-
-#x2=[]
-#y2=[]
-#for star in stars2:
-#    x2.append(star.x)
-#    y2.append(star.y)
-
-#data = fits.getdata(r"observations\q1959iS4.FIT")
-#plt.imshow(data, origin="lower", vmin=1700, vmax=3000)
-#plt.plot(x1, y1, "yx")
-#plt.show()
-
-#data = fits.getdata(r"Fields\fits\Q1959.fits")
-#plt.imshow(data, origin="lower", vmin=10, vmax=255)
-#plt.plot(x2, y2, "rx")
-#plt.show()
-
-x, y = np.genfromtxt("alipy_cats\Q1959alipysexcat", usecols=(1, 2), unpack=True)
-#x, y = np.genfromtxt("alipy_cats\s1", usecols=(1, 2), unpack=True)
-plt.plot(x, y, "y.")
+x, y = np.genfromtxt(r"alipy_cats\{0}alipysexcat".format(ref), usecols=(1, 2), unpack=True)
+data = fits.getdata(observed_field)
+plt.imshow(data, origin="lower", vmin=1700, vmax=3000)
+plt.plot(x, y, "rx")
 plt.show()
-tarns = adj.find_transform(observed_field, "Q1959")
+
+plt.imshow(data, origin="lower", vmin=1700, vmax=3000)
+plt.plot(x_trans, y_trans, "rx")
+plt.show()

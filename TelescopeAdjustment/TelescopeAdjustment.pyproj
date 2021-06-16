@@ -5,7 +5,7 @@
     <ProjectGuid>905272f2-10a4-4425-854f-2f6c9aa2d52e</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>observations.py</StartupFile>
+    <StartupFile>main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>

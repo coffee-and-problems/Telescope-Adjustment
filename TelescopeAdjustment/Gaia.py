@@ -54,14 +54,19 @@ class Gaia(object):
 
         maped_star_list = []
         for star in star_list:
-            x = (-zero_ra + star.ra) * ratio/2
+            x = (-zero_ra + star.ra) * ratio/2 * 5/6
             y = (-zero_dec + star.dec) * ratio
-            #x = int(round((-zero_ra + star.ra * 60) * ratio))
-            #y = int(round((-zero_dec + star.dec * 60) * ratio))
             maped_star_list.append(Gaia_star(x, y, star.flux))
         return maped_star_list
          
     def save_sex_cat(self, name, stars):
+        """
+        Saves list of Gaia_star to file to match SExtractor catalog format
+            :param name: name of the file to be created
+            :type name: string
+            :param stars: list of Gaia_star objects
+            :type stars: list<Gaia_star>
+        """
         file_path = path.join("alipy_cats", "{0}".format(name))
         with open(file_path, 'w') as file:
             file.write("#   1 NUMBER          Running object number\n")
@@ -74,16 +79,24 @@ class Gaia(object):
 
             for i in range(len(stars)):
                 star = stars[i]
-                #file.write(f'{i+1:{10}}{star.ra:{11}}{star.dec:{11}}{star.flux:{13}.{4}}{1.09:{9}}{0:{4}}{1.0:{9}}\n')
-                file.write(f'{i+1:{10}}{star.ra:{11}.{5}}{star.dec:{11}.{5}}{star.flux:{13}.{4}}{1.09:{9}}{0:{4}}{1.0:{9}}\n')
+                file.write(f'{i+1:{10}}{star.ra:{11}.{3}}{star.dec:{11}.{3}}{star.flux:{13}.{4}}{1.09:{9}}{0:{4}}{1.0:{9}}\n')
 
     def pet_sexy_cat(self):
         print("      \\    /\\\n       )  ( \')\n      (  /  )\n meaw  \(__)|")
 
+    def coords_to_deg(self, ra_string, dec_string):
+        """
+        Returns (RA Dec) tuple in degrees
+            :param ra_string: RA (ex. 04 19 45)
+            :type ra_string: string
+            :param dec_string: dec (ex. -05 47 22)
+            :type dec_string: string
+        """
+        RA = ra_string.split()
+        ra = float(RA[0])*15 + float(RA[1])*0.25 + float(RA[2])*0.0042
+        DEC = dec_string.split()
+        dec = float(DEC[0]) + float(DEC[1])*0.0167 + float(DEC[2])*0.0003
+        return (ra, dec)
 
 
-gaia = Gaia()
-s1 = gaia.parse_gaia_results("17.gz")
-s2 = gaia.map(s1, 10, 600, (299.9991667, 65.1483333))
-gaia.save_sex_cat("Q1959alipysexcat", s2)
-pass
+
