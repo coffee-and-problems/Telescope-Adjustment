@@ -94,7 +94,7 @@ def mindist(fourstars):
     return np.min(dists)
 
 
-def makequads1(starlist, n=7, s=0, d=50.0, verbose=True):
+def makequads1(starlist, n=20, s=0, d=50.0, verbose=True):
     """
     First trivial quad maker.
     Makes combis of the n brightest stars.

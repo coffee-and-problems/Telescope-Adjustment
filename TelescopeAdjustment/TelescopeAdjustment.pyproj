@@ -5,7 +5,7 @@
     <ProjectGuid>905272f2-10a4-4425-854f-2f6c9aa2d52e</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>main.py</StartupFile>
+    <StartupFile>observations.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -26,6 +26,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Adjustment.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Gaia.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="lib\alignment.py" />
