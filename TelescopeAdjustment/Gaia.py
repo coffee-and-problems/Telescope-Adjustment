@@ -1,6 +1,7 @@
 import gzip
 from astropy.io.votable import parse_single_table
 from os import path
+import math
 
 
 class Gaia_star():
@@ -46,16 +47,17 @@ class Gaia(object):
             :param ra_dec_center: ra and dec of the center in degrees (ex (299.99, 65.18))
             :type ra_dec_center: tuple<float, float>
         """
-        ratio = 3601.44#pix_fov/arcmin_fov
+        ratio_y = pix_fov/arcmin_fov*60
+        ratio_x = pix_fov/arcmin_fov*60*math.cos(math.radians(ra_dec_center[1]))
 
-        zero_ra = ra_dec_center[0] - arcmin_fov/60
+        zero_ra = ra_dec_center[0] - arcmin_fov/120
         zero_dec = ra_dec_center[1]- arcmin_fov/120
 
 
         maped_star_list = []
         for star in star_list:
-            x = (-zero_ra + star.ra) * ratio/2 * 5/6
-            y = (-zero_dec + star.dec) * ratio
+            x = (-zero_ra + star.ra) * ratio_x
+            y = (-zero_dec + star.dec) * ratio_y
             maped_star_list.append(Gaia_star(x, y, star.flux))
         return maped_star_list
          
@@ -79,7 +81,7 @@ class Gaia(object):
 
             for i in range(len(stars)):
                 star = stars[i]
-                file.write(f'{i+1:{10}}{star.ra:{11}.{3}}{star.dec:{11}.{3}}{star.flux:{13}.{4}}{1.09:{9}}{0:{4}}{1.0:{9}}\n')
+                file.write(f'{i+1:{10}}{star.ra:{11}.{4}}{star.dec:{11}.{4}}{star.flux:{13}.{4}}{1.09:{9}}{0:{4}}{1.0:{9}}\n')
 
     def pet_sexy_cat(self):
         print("      \\    /\\\n       )  ( \')\n      (  /  )\n meaw  \(__)|")
@@ -93,10 +95,7 @@ class Gaia(object):
             :type dec_string: string
         """
         RA = ra_string.split()
-        ra = float(RA[0])*15 + float(RA[1])*0.25 + float(RA[2])*0.0042
+        ra = float(RA[0])*15 + float(RA[1])*0.25 + float(RA[2])*1/240
         DEC = dec_string.split()
-        dec = float(DEC[0]) + float(DEC[1])*0.0167 + float(DEC[2])*0.0003
+        dec = float(DEC[0]) + float(DEC[1])*1/60 + float(DEC[2])*1/3600
         return (ra, dec)
-
-
-
