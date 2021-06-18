@@ -3,6 +3,9 @@ from astropy.io.votable import parse_single_table
 from os import path
 import math
 
+from astropy import coordinates
+import astropy.units as u
+from astroquery.gaia import Gaia
 
 class Gaia_star():
     def __init__(self, ra, dec, flux):
@@ -11,20 +14,18 @@ class Gaia_star():
         self.flux = flux
 
 
-class Gaia(object):
+class Gaia_data(object):
     """Class to work with Gaia database"""
 
-    def parse_gaia_results(self, path_to_table):
+    def make_star_list(self, table):
         """
-        Sends a request to https://app.aavso.org to get information on a specific object.
-            :param path_to_table: path to Gaia .gz archive
-            :type path_to_table: string
+        Parses ra, dec, flux columns to list of Gaia_star
+            :param table: Gaia table
+            :type table:
         """
-        a_file = gzip.open(path_to_table, "rb")
-        table = parse_single_table(a_file)
-        RA = table.array['ra']
-        DEC = table.array['dec']
-        FLUX = table.array['phot_g_mean_flux']
+        RA = table['ra']
+        DEC = table['dec']
+        FLUX = table['phot_g_mean_flux']
 
         if len(RA) != len(DEC) and len(RA) != len(FLUX):
             raise RuntimeError('Something is not quite right with Gaia table') from exc
@@ -35,6 +36,43 @@ class Gaia(object):
 
         return stars
 
+    def download_gaia_results(self, coords, fov):
+        """
+        Sends a request to https://app.aavso.org to get information on a specific object.
+            :param coords: coords in degrees
+            :type coords: tuple<float, float>
+            :param fov: field of view in arcmins
+            :type fov: float
+        """
+
+        #async is an overkill for 500 rows but let's stick with that for now
+        query = "SELECT TOP 500 gaia_source.ra,gaia_source.dec,gaia_source.phot_g_mean_flux,gaia_source.phot_g_mean_mag \
+        FROM gaiadr2.gaia_source \
+        WHERE \
+        CONTAINS(\
+	        POINT('ICRS',gaiadr2.gaia_source.ra,gaiadr2.gaia_source.dec),\
+	        CIRCLE('ICRS',{0},{1},{2})\
+        )=1  AND  (gaiadr2.gaia_source.phot_rp_mean_mag<=17);".format(coords[0], coords[1], fov/120)
+        job = Gaia.launch_job_async(query, dump_to_file=False)
+        #job = Gaia.launch_job_async("SELECT * \
+        #FROM gaiadr1.gaia_source \
+        #WHERE CONTAINS(POINT('ICRS',gaiadr1.gaia_source.ra,gaiadr1.gaia_source.dec),CIRCLE('ICRS',56.75,24.1167,2))=1;" \
+        #, dump_to_file=True)
+        table = job.get_results()
+
+        return self.make_star_list(table)
+
+    def parse_gaia_results(self, path_to_table):
+        """
+        Parses an existing .gz archive with VOTable
+            :param path_to_table: path to Gaia .gz archive
+            :type path_to_table: string
+        """
+        a_file = gzip.open(path_to_table, "rb")
+        table = parse_single_table(a_file)
+
+        return self.make_star_list(table.array)
+        
     def map(self, star_list, arcmin_fov, pix_fov, ra_dec_center):
         """
         Returns star list with coordanates in pixelsas like if they were observed by a telescope.
@@ -99,3 +137,24 @@ class Gaia(object):
         DEC = dec_string.split()
         dec = float(DEC[0]) + float(DEC[1])*1/60 + float(DEC[2])*1/3600
         return (ra, dec)
+
+    def make_ref_cat(self, name, ra, dec, fov, gaia_table=None):
+        """
+        Saves reference SExtracror catalog of the object.
+        :param ra_string: RA (ex. 04 19 45)
+            :type ra_string: string
+            :param dec_string: dec (ex. -05 47 22)
+            :type dec_string: string
+            :param fov: field of view in arcmins (ex 9.5)
+            :type fov: float
+            :param gaia_table: path to Gaia .gz archive. If none we'll download our own (will NOT be saved on disk)
+            :type gaia_table: string
+        """
+        coords = self.coords_to_deg(ra, dec)
+
+        if gaia_table is None:
+            s1 = self.download_gaia_results(coords, fov)
+        else:
+            s1 = self.parse_gaia_results(gaia_table)
+        s2 = self.map(s1, fov, 528, coords)
+        self.save_sex_cat(f"{name}alipysexcat", s2)
