@@ -13,19 +13,20 @@ plt.figure(figsize=(6.00, 6.00), dpi=100)
 plt.axis('equal')
 
 fov = 10
-obj = "s50716iS6"
+observation = "s50716iS6"
 ref = "s50716"
-ra = '07 21 53.4'
-dec = '71 20 36'
 
 #Geting Gaia catalogs
+source_file = "test_coords.csv"
+#source_file = "objects_coords.csv
+
 gaia = Gaia_data()
-gaia.make_ref_cat(ref, ra, dec, fov)
+gaia.make_ref_cats_for_all(source_file)
 
 
 #Finding transform for the field observed
 adj = Adjustment(verbose=True, keepcat=True)
-observed_field = r"observations\{0}.FIT".format(obj)
+observed_field = r"observations\{0}.FIT".format(observation)
 
 x, y = np.genfromtxt(r"alipy_cats\{0}alipysexcat".format(ref), usecols=(1, 2), unpack=True)
 data = fits.getdata(observed_field)

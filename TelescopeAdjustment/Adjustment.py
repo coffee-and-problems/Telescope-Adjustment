@@ -57,7 +57,7 @@ class Adjustment(object):
 
     def find_transform(self, picture, object_name=None):
         """
-        Returns Identification.trans (). The user can specify the name of reference object and the corresponding catalog will be used.
+        Returns Identification.trans. The user can specify the name of reference object and the corresponding catalog will be used.
         If none, all catalogs will be viewed till one is OK.
             :param object_name: object name (ex. Q1959)
             :type object_name: string

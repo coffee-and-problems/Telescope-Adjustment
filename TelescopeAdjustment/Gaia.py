@@ -36,13 +36,15 @@ class Gaia_data(object):
 
         return stars
 
-    def download_gaia_results(self, coords, fov):
+    def download_gaia_results(self, coords, fov, keep_on_disk):
         """
         Sends a request to https://app.aavso.org to get information on a specific object.
             :param coords: coords in degrees
             :type coords: tuple<float, float>
             :param fov: field of view in arcmins
             :type fov: float
+            :param keep_on_disk: should Gaia VOTables be saved on disk?
+            :type keep_on_disk: bool
         """
 
         #async is an overkill for 500 rows but let's stick with that for now
@@ -53,11 +55,7 @@ class Gaia_data(object):
 	        POINT('ICRS',gaiadr2.gaia_source.ra,gaiadr2.gaia_source.dec),\
 	        CIRCLE('ICRS',{0},{1},{2})\
         )=1  AND  (gaiadr2.gaia_source.phot_rp_mean_mag<=17);".format(coords[0], coords[1], fov/120)
-        job = Gaia.launch_job_async(query, dump_to_file=False)
-        #job = Gaia.launch_job_async("SELECT * \
-        #FROM gaiadr1.gaia_source \
-        #WHERE CONTAINS(POINT('ICRS',gaiadr1.gaia_source.ra,gaiadr1.gaia_source.dec),CIRCLE('ICRS',56.75,24.1167,2))=1;" \
-        #, dump_to_file=True)
+        job = Gaia.launch_job_async(query, dump_to_file=keep_on_disk)
         table = job.get_results()
 
         return self.make_star_list(table)
@@ -138,10 +136,10 @@ class Gaia_data(object):
         dec = float(DEC[0]) + float(DEC[1])*1/60 + float(DEC[2])*1/3600
         return (ra, dec)
 
-    def make_ref_cat(self, name, ra, dec, fov, gaia_table=None):
+    def make_ref_cat(self, name, ra, dec, fov, gaia_table=None, keep_tabel=False):
         """
         Saves reference SExtracror catalog of the object.
-        :param ra_string: RA (ex. 04 19 45)
+            :param ra_string: RA (ex. 04 19 45)
             :type ra_string: string
             :param dec_string: dec (ex. -05 47 22)
             :type dec_string: string
@@ -149,12 +147,30 @@ class Gaia_data(object):
             :type fov: float
             :param gaia_table: path to Gaia .gz archive. If none we'll download our own (will NOT be saved on disk)
             :type gaia_table: string
+            :param keep_tables: should Gaia VOTables be saved on disk?
+            :type keep_tables: bool
         """
         coords = self.coords_to_deg(ra, dec)
 
         if gaia_table is None:
-            s1 = self.download_gaia_results(coords, fov)
+            s1 = self.download_gaia_results(coords, fov, keep_tabel)
         else:
             s1 = self.parse_gaia_results(gaia_table)
         s2 = self.map(s1, fov, 528, coords)
         self.save_sex_cat(f"{name}alipysexcat", s2)
+
+    def make_ref_cats_for_all(self, csv_file, fov, keep_gaia_tables=False):
+        """
+        Saves reference SExtracror catalog of the objects described in a csv file.
+            :param csv_file: path to .csv file containing as follows: name of the object, ra, dec
+            :type csv_file: string
+            :param fov: field of view in arcmins (ex 9.5)
+            :type fov: float
+            :param keep_gaia_tables: should Gaia VOTables be saved on disk?
+            :type keep_gaia_tables: bool
+        """
+        with open(csv_file) as file:
+            reader = csv.reader(file, skipinitialspace=True)
+            next(reader, None)
+            for source in reader:
+                field = self.make_ref_cat(source[0], source[1], source[2], fov, keep_tabel=keep_gaia_tables)
