@@ -13,15 +13,15 @@ plt.figure(figsize=(6.00, 6.00), dpi=100)
 plt.axis('equal')
 
 fov = 10
-observation = "s50716iS6"
-ref = "s50716"
+observation = "q1959iS4"
+ref = "Q1959"
 
 #Geting Gaia catalogs
 source_file = "test_coords.csv"
 #source_file = "objects_coords.csv
 
-gaia = Gaia_data()
-gaia.make_ref_cats_for_all(source_file)
+#gaia = Gaia_data()
+#gaia.make_ref_cats_for_all(source_file, fov)
 
 
 #Finding transform for the field observed

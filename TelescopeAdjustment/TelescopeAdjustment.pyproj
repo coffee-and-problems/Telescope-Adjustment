@@ -31,7 +31,6 @@
     <Compile Include="Gaia.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="lib\alignment.py" />
     <Compile Include="lib\alipylocal\align.py" />
     <Compile Include="lib\alipylocal\ident.py" />
     <Compile Include="lib\alipylocal\imgcat.py" />
@@ -48,18 +47,6 @@
     <Compile Include="lib\asciidatalocal\asciisorter.py" />
     <Compile Include="lib\asciidatalocal\asciiutils.py" />
     <Compile Include="lib\asciidatalocal\__init__.py" />
-    <Compile Include="lib\cameras\camera.py" />
-    <Compile Include="lib\cameras\fli_lx200.py" />
-    <Compile Include="lib\cameras\st7_azt8.py" />
-    <Compile Include="lib\cameras\st7_lx200.py" />
-    <Compile Include="lib\Configuration.py" />
-    <Compile Include="lib\filterPolCat.py" />
-    <Compile Include="lib\ImagPanel.py" />
-    <Compile Include="lib\Menu.py" />
-    <Compile Include="lib\PolarChecker.py" />
-    <Compile Include="lib\reduction.py" />
-    <Compile Include="lib\RightPanel.py" />
-    <Compile Include="lib\se.py" />
     <Compile Include="lib\__init__.py" />
     <Compile Include="main.py">
       <SubType>Code</SubType>
@@ -73,7 +60,6 @@
     <Folder Include="lib\alipylocal\" />
     <Folder Include="lib\alipylocal\.backups\" />
     <Folder Include="lib\asciidatalocal\" />
-    <Folder Include="lib\cameras\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="lib\alipylocal\.backups\.ident.py~" />
@@ -83,9 +69,6 @@
     <Content Include="lib\alipysex.nnw" />
     <Content Include="lib\alipysex.param" />
     <Content Include="lib\alipysex.sex" />
-    <Content Include="lib\cameras\fli_lx200.params" />
-    <Content Include="lib\cameras\st7_azt8.params" />
-    <Content Include="lib\cameras\st7_lx200.params" />
     <Content Include="lib\default.conv" />
     <Content Include="lib\default.nnw" />
     <Content Include="lib\default.param" />

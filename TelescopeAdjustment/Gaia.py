@@ -2,6 +2,7 @@ import gzip
 from astropy.io.votable import parse_single_table
 from os import path
 import math
+import csv
 
 from astropy import coordinates
 import astropy.units as u
