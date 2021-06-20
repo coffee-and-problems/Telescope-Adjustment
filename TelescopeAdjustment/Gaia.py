@@ -15,8 +15,10 @@ class Gaia_star():
         self.flux = flux
 
 
-class Gaia_data(object):
+class Gaia_data():
     """Class to work with Gaia database"""
+    def __init__(self, *args, **kwargs):
+        self.pixel_fov = 528
 
     def make_star_list(self, table):
         """
@@ -72,7 +74,21 @@ class Gaia_data(object):
 
         return self.make_star_list(table.array)
         
-    def map(self, star_list, arcmin_fov, pix_fov, ra_dec_center):
+    def get_ratio(self, arcmin_fov, ra_dec_center):
+        """
+        Returns pixel/degree ratio as (ratio_RA, ratio_Dec)
+            :param arcmin_fov: field of view in arcmins (ex 9.5)
+            :type arcmin_fov: float
+            :param pix_fov: field of view in pixels (ex 600)
+            :type pix_fov: int
+            :param ra_dec_center: ra and dec of the center in degrees (ex (299.99, 65.18))
+            :type ra_dec_center: tuple<float, float>
+        """
+        ratio_y = self.pixel_fov/arcmin_fov*60
+        ratio_x = self.pixel_fov/arcmin_fov*60*math.cos(math.radians(ra_dec_center[1]))
+        return (ratio_x, ratio_y)
+
+    def map(self, star_list, arcmin_fov, ra_dec_center):
         """
         Returns star list with coordanates in pixelsas like if they were observed by a telescope.
             :param star_list: list of Gaia_star objects
@@ -84,10 +100,9 @@ class Gaia_data(object):
             :param ra_dec_center: ra and dec of the center in degrees (ex (299.99, 65.18))
             :type ra_dec_center: tuple<float, float>
         """
-        ratio_y = pix_fov/arcmin_fov*60
-        ratio_x = pix_fov/arcmin_fov*60*math.cos(math.radians(ra_dec_center[1]))
+        ratio_x, ratio_y = self.get_ratio(arcmin_fov, ra_dec_center)
 
-        zero_ra = ra_dec_center[0] - arcmin_fov/120
+        zero_ra = ra_dec_center[0] - self.pixel_fov/2/ratio_x
         zero_dec = ra_dec_center[1]- arcmin_fov/120
 
 
@@ -137,6 +152,25 @@ class Gaia_data(object):
         dec = float(DEC[0]) + float(DEC[1])*1/60 + float(DEC[2])*1/3600
         return (ra, dec)
 
+    def get_box(self, coords, fov):
+        """
+        Returns ((ra_start, ra_end),(dec_start,dec_end)) in gedrees
+            :param ra_string: RA (ex. 04 19 45)
+            :type ra_string: string
+            :param dec_string: dec (ex. -05 47 22)
+            :type dec_string: string
+            :param fov: field of view in arcmins (ex 9.5)
+            :type fov: float
+        """
+        ratio_x, ratio_y = self.get_ratio(arcmin_fov, ra_dec_center)
+
+        start_ra = ra_dec_center[0] - self.pixel_fov/2/ratio_x
+        start_dec = ra_dec_center[1]- arcmin_fov/120
+        end_ra = ra_dec_center[0] + self.pixel_fov/2/ratio_x
+        end_dec = ra_dec_center[1] + arcmin_fov/120
+        return ((start_ra, end_ra), (start_dec, end_dec))
+
+
     def make_ref_cat(self, name, ra, dec, fov, gaia_table=None, keep_tabel=False):
         """
         Saves reference SExtracror catalog of the object.
@@ -157,7 +191,7 @@ class Gaia_data(object):
             s1 = self.download_gaia_results(coords, fov, keep_tabel)
         else:
             s1 = self.parse_gaia_results(gaia_table)
-        s2 = self.map(s1, fov, 528, coords)
+        s2 = self.map(s1, fov, coords)
         self.save_sex_cat(f"{name}alipysexcat", s2)
 
     def make_ref_cats_for_all(self, csv_file, fov, keep_gaia_tables=False):

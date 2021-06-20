@@ -1,51 +1,82 @@
 import numpy as np
 import imageio
 import glob
+import csv
 from os import path
 
 from lib import alipylocal as alipy
 from Gaia import Gaia_data
 from Adjustment import Adjustment
 
-import matplotlib.pyplot as plt
 from astropy.io import fits
-plt.figure(figsize=(6.00, 6.00), dpi=100)
-plt.axis('equal')
-
-fov = 10
-observation = "q1959iS4"
-ref = "Q1959"
-
-#Geting Gaia catalogs
-source_file = "test_coords.csv"
-#source_file = "objects_coords.csv
-
-#gaia = Gaia_data()
-#gaia.make_ref_cats_for_all(source_file, fov)
 
 
-#Finding transform for the field observed
-adj = Adjustment(verbose=True, keepcat=True)
-observed_field = r"observations\{0}.FIT".format(observation)
+class Main():
+    """Main class"""
+    def __init__(self, object_name, observation):
+        self.fov = 10
+        self.observation = observation
+        self.ref = object_name
+        with open(source_file) as file:
+            reader = csv.reader(file, skipinitialspace=True)
+            next(reader, None)
+            for source in reader:
+                if (source[0] == ref):
+                    self.ra = source[1]
+                    self.dec = source[2]
 
-x, y = np.genfromtxt(r"alipy_cats\{0}alipysexcat".format(ref), usecols=(1, 2), unpack=True)
-data = fits.getdata(observed_field)
+    def run():
+        #Geting Gaia catalogs
+        source_file = "test_coords.csv"
+        #source_file = "objects_coords.csv
+
+        gaia = Gaia_data()
+        adj = Adjustment(verbose=False, keepcat=True)
+
+        if not path.isfile(path.join(adj.path_to_reference_catalogs, f"{ref}alipysexcat")):
+            gaia.make_ref_cat(ref, ra, dec, fov)
+
+
+        #Finding transform for the field observed
+        trans = adj.find_transform(observation, ref)
+
+        #Obtaining telescope adjustment in arcsecs
+        shift = trans.get_shift()
+
+        coords = gaia.coords_to_deg(self.ra, self.dec)
+        ratio_x, ratio_y = gaia.get_ratio(fov, coords)
+        ratio_x_arcsec = ratio_x / 3600
+        ratio_y_arcsec = ratio_y / 3600
+        print("x, y offset, pxl: {0}".format(shift))
+        shift_ra = shift[0]/ratio_x_arcsec
+        shift_dec = shift[1]/ratio_y_arcsec
+        print("ra, dec offset, arcsec: {0}, {1}".format(shift_ra, shift_dec))
+        return (coords[0] + shift_ra, coords[1] + shift_dec)
+
+#Plotting data
+#import matplotlib.pyplot as plt
+
+#plt.figure(figsize=(6.00, 6.00), dpi=100)
+#plt.axis('equal')
+#x, y = np.genfromtxt(r"alipy_cats\{0}alipysexcat".format(ref), usecols=(1, 2), unpack=True)
+#data = fits.getdata(observed_field)
 #plt.imshow(data, origin="lower", vmin=1700, vmax=3000)
-plt.plot(x, y, "rx")
-plt.show()
+#plt.plot(x, y, "rx")
+#plt.show()
 
-trans = adj.find_transform(observed_field, ref)
-trans = trans.inverse()
-stars = adj.get_stars(ref)
-stars3 = trans.applystarlist(stars)
+#trans = trans.inverse()
+#stars = adj.get_stars(ref)
+#stars3 = trans.applystarlist(stars)
 
-x_trans = []
-y_trans = []
-for star in stars3:
-    x_trans.append(star.x)
-    y_trans.append(star.y)
+#x_trans = []
+#y_trans = []
+#for star in stars3:
+#    x_trans.append(star.x)
+#    y_trans.append(star.y)
 
 
-plt.imshow(data, origin="lower", vmin=1700, vmax=3000)
-plt.plot(x_trans, y_trans, "rx")
-plt.show()
+#plt.imshow(data, origin="lower", vmin=1700, vmax=3000)
+#plt.plot(x_trans, y_trans, "rx")
+#plt.show()
+
+main = Main("q1959", "observations\q1959iS4.FIT")

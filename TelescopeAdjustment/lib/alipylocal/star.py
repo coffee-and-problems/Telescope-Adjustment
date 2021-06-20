@@ -259,6 +259,9 @@ class SimpleTransform:
         The CCW rotation angle, in degrees
         """
         return math.atan2(self.v[1], self.v[0]) * (180.0/math.pi)  # % 360.0
+    
+    def get_shift(self):
+        return self.v[2:4]
 
     def __str__(self):
         return "Rotation %+11.6f [deg], scale %8.6f" % (self.getrotation(), self.getscaling())
