@@ -14,6 +14,14 @@ from astropy.io import fits
 class Main():
     """Main class"""
     def __init__(self, object_name, observation, source_file):
+        """
+            :param object_name: object name
+            :type object_name: string
+            :param observation: path to .FIT file containing the observation
+            :type observation: string
+            :param source_file: path to .csv file containing as follows: name of the object, ra, dec
+            :type source_file: string
+        """
         self.fov = 10
         self.observation = observation
         self.ref = object_name
@@ -26,6 +34,9 @@ class Main():
                     self.dec = source[2]
 
     def run(self):
+        """
+        Returns the center of the observed image in deg
+        """
         #Geting Gaia catalogs
         gaia = Gaia_data()
         adj = Adjustment(verbose=False, keepcat=True)
