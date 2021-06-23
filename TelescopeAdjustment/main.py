@@ -61,32 +61,7 @@ class Main():
         print("ra, dec offset, arcsec: {0}, {1}".format(shift_ra, shift_dec))
         return (coords[0] + shift[0]/ratio_x, coords[1] + shift[1]/ratio_y)
 
-#Plotting data
-#import matplotlib.pyplot as plt
-
-#plt.figure(figsize=(6.00, 6.00), dpi=100)
-#plt.axis('equal')
-#x, y = np.genfromtxt(r"alipy_cats\{0}alipysexcat".format(ref), usecols=(1, 2), unpack=True)
-#data = fits.getdata(observed_field)
-#plt.imshow(data, origin="lower", vmin=1700, vmax=3000)
-#plt.plot(x, y, "rx")
-#plt.show()
-
-#trans = trans.inverse()
-#stars = adj.get_stars(ref)
-#stars3 = trans.applystarlist(stars)
-
-#x_trans = []
-#y_trans = []
-#for star in stars3:
-#    x_trans.append(star.x)
-#    y_trans.append(star.y)
-
-
-#plt.imshow(data, origin="lower", vmin=1700, vmax=3000)
-#plt.plot(x_trans, y_trans, "rx")
-#plt.show()
-
-main = Main("Q1959", "observations\q1959iS4.FIT", "test_coords.csv")
-a = main.run()
-print(a)
+#Usage example
+#main = Main("Q1959", "observations\q1959iS4.FIT", "test_coords.csv")
+#a = main.run()
+#print(a)
