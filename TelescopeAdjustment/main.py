@@ -19,19 +19,19 @@ class Main():
             :type object_name: string
             :param observation: path to .FIT file containing the observation
             :type observation: string
-            :param source_file: path to .csv file containing as follows: name of the object, ra, dec
+            :param source_file: path to.txt file containing as follows: name of the object, ra, dec
             :type source_file: string
         """
         self.fov = 10
         self.observation = observation
         self.ref = object_name
         with open(source_file) as file:
-            reader = csv.reader(file, skipinitialspace=True)
-            next(reader, None)
-            for source in reader:
+            for line in file:
+                source = line.split()
+                s = " "
                 if (source[0] == self.ref):
-                    self.ra = source[1]
-                    self.dec = source[2]
+                    self.ra = s.join([source[1], source[2], source[3]])
+                    self.dec = s.join([source[4], source[5], source[6]])
 
     def run(self):
         """
@@ -62,6 +62,6 @@ class Main():
         return (coords[0] + shift[0]/ratio_x, coords[1] + shift[1]/ratio_y)
 
 #Usage example
-#main = Main("Q1959", "observations\q1959iS4.FIT", "test_coords.csv")
+#main = Main("q1959", "observations\q1959iS4.FIT", "TABOB.txt")
 #a = main.run()
 #print(a)
