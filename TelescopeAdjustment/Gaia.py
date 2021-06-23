@@ -185,7 +185,7 @@ class Gaia_data():
             :param keep_tables: should Gaia VOTables be saved on disk?
             :type keep_tables: bool
         """
-        coords = self.coords_to_deg(ra, dec)
+        coords = (ra, dec)
 
         if gaia_table is None:
             s1 = self.download_gaia_results(coords, fov, keep_tabel)

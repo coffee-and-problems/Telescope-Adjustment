@@ -30,8 +30,8 @@ class Main():
                 source = line.split()
                 s = " "
                 if (source[0] == self.ref):
-                    self.ra = s.join([source[1], source[2], source[3]])
-                    self.dec = s.join([source[4], source[5], source[6]])
+                    self.ra = float(source[1])
+                    self.dec = float(source[2])
 
     def run(self):
         """
@@ -51,7 +51,7 @@ class Main():
         #Obtaining telescope adjustment in arcsecs
         shift = trans.get_shift()
 
-        coords = gaia.coords_to_deg(self.ra, self.dec)
+        coords = (self.ra, self.dec)
         ratio_x, ratio_y = gaia.get_ratio(self.fov, coords)
         ratio_x_arcsec = ratio_x / 3600
         ratio_y_arcsec = ratio_y / 3600
@@ -59,9 +59,9 @@ class Main():
         shift_ra = shift[0]/ratio_x_arcsec
         shift_dec = shift[1]/ratio_y_arcsec
         print("ra, dec offset, arcsec: {0}, {1}".format(shift_ra, shift_dec))
-        return (coords[0] + shift[0]/ratio_x, coords[1] + shift[1]/ratio_y)
+        return (shift_ra, shift_dec)
 
 #Usage example
-#main = Main("q1959", "observations\q1959iS4.FIT", "TABOB.txt")
-#a = main.run()
-#print(a)
+main = Main("q1959", "observations\q1959iS4.FIT", "objects_coords.txt")
+a = main.run()
+print(a)
