@@ -62,6 +62,6 @@ class Main():
         return (shift_ra, shift_dec)
 
 #Usage example
-main = Main("q1959", "observations\q1959iS4.FIT", "objects_coords.txt")
-a = main.run()
-print(a)
+#main = Main("q1959", "observations\q1959iS4.FIT", "objects_coords.txt")
+#a = main.run()
+#print(a)
