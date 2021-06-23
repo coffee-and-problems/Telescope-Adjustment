@@ -41,9 +41,9 @@ class Main():
         gaia = Gaia_data()
         adj = Adjustment(verbose=False, keepcat=True)
 
+        #We will download the data only if the desired catalog is not present
         if not path.isfile(path.join(adj.path_to_reference_catalogs, f"{self.ref}alipysexcat")):
             gaia.make_ref_cat(self.ref, self.ra, self.dec, self.fov)
-
 
         #Finding transform for the field observed
         trans = adj.find_transform(self.observation, self.ref)
