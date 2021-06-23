@@ -42,7 +42,7 @@ class Main():
         adj = Adjustment(verbose=False, keepcat=True)
 
         if not path.isfile(path.join(adj.path_to_reference_catalogs, f"{self.ref}alipysexcat")):
-            gaia.make_ref_cat(ref, self.ra, self.dec, self.fov)
+            gaia.make_ref_cat(self.ref, self.ra, self.dec, self.fov)
 
 
         #Finding transform for the field observed
