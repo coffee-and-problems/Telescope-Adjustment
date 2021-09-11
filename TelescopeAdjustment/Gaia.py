@@ -6,7 +6,6 @@ import csv
 
 from astropy import coordinates
 import astropy.units as u
-from astroquery.gaia import Gaia
 
 class Gaia_star():
     def __init__(self, ra, dec, flux):
@@ -50,8 +49,10 @@ class Gaia_data():
             :param keep_on_disk: should Gaia VOTables be saved on disk?
             :type keep_on_disk: bool
         """
+        # this import should stay here not to make an unnecessary connection
+        from astroquery.gaia import Gaia
 
-        #async is an overkill for 500 rows but let's stick with that for now
+        # async is an overkill for 500 rows but let's stick with that for now
         query = "SELECT TOP 500 gaia_source.ra,gaia_source.dec,gaia_source.phot_g_mean_flux,gaia_source.phot_g_mean_mag \
         FROM gaiadr2.gaia_source \
         WHERE \
